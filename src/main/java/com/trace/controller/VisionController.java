@@ -11,7 +11,6 @@ public class VisionController {
 
     @Autowired
     private VisionService visionService;
-
     @PostMapping("/upload")
     public String uploadImage(@RequestParam("file") MultipartFile file) {
         try {
