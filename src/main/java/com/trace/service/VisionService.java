@@ -12,7 +12,7 @@ import java.util.Base64;
 @Service
 public class VisionService {
 
-    private static final String API_KEY = "AIzaSyBdCtEa5maceJyPu_-T_g-08iPNR22ZM4Q";
+    private static final String API_KEY = System.getenv("GOOGLE_VISION_API_KEY");
     private static final String VISION_URL = "https://vision.googleapis.com/v1/images:annotate?key=" + API_KEY;
 
     public String searchImage(MultipartFile file) throws IOException {
