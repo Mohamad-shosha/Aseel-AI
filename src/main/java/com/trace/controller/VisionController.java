@@ -3,6 +3,8 @@ package com.trace.controller;
 import com.trace.service.VisionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +22,7 @@ public class VisionController {
     private String passwordsEnv;
 
     @PostMapping("/upload")
-    public String uploadImage(
+    public ResponseEntity<?> uploadImage(
             @RequestParam("file") MultipartFile file,
             @RequestParam("password") String password
     ) {
@@ -30,13 +32,17 @@ public class VisionController {
                     .toList();
 
             if (!validPasswords.contains(password)) {
-                return "❌ Unauthorized: Incorrect password";
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("❌ كلمة السر غير صحيحة");
             }
 
-            return visionService.searchImage(file);
+            String result = visionService.searchImage(file);
+            return ResponseEntity.ok(result);
+
         } catch (Exception e) {
             e.printStackTrace();
-            return "Error: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error: " + e.getMessage());
         }
     }
 }
